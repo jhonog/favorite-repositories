@@ -6,7 +6,6 @@ export const RepositoriesRoutes = () => {
     return (
         <Routes>
             <Route path="/" element={<RepositoriesPage />} />
-
             <Route path="/*" element={<Navigate to="/" />} />
         </Routes>
     )

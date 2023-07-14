@@ -1,20 +1,26 @@
 import { useForm, SubmitHandler } from 'react-hook-form';
-import { Card, CardContent, TextField, Button, Snackbar, Alert } from '@mui/material';
+import { Card, CardContent, TextField, Button, Snackbar, Alert, Typography } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../store';
-import { startCreatingUserWithEmailPassword } from '../../store/auth/thunks';
+import { startCreatingUserWithEmailPassword } from '../../store/auth';
 import { SiginUpData } from '../models';
 import { useMemo } from 'react';
+import { AuthLayout } from '../layout/AuthLayout';
+import { Link } from 'react-router-dom';
+import { setTemporalDisplayName } from '../../store/favoriteRepos';
 
 export const RegisterPage = () => {
     const dispatch = useDispatch<AppDispatch>();
 
+    // Custom Hook for control forms
     const { handleSubmit, register, formState: { errors }, trigger } = useForm<SiginUpData>();
 
     const { status, errorMessage } = useSelector((state: RootState) => state.auth);
+
     const isCheckingAuthentication = useMemo(() => status === 'checking', [status]);
 
     const onSubmit: SubmitHandler<SiginUpData> = (data: SiginUpData) => {
+        dispatch(setTemporalDisplayName(data.displayName))
         dispatch(startCreatingUserWithEmailPassword(data));
     };
 
@@ -23,10 +29,12 @@ export const RegisterPage = () => {
     };
 
     return (
-        <div className="flex justify-center items-center h-screen">
+        <AuthLayout>
             <Card>
                 <CardContent>
-                    <h2 className="text-center mb-4">Sigin Up!</h2>
+                    <Typography variant="h4" sx={{ paddingBottom: '1rem', textAlign: 'center' }} >
+                        Sign up!
+                    </Typography>
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <TextField
                             label="Username"
@@ -36,6 +44,7 @@ export const RegisterPage = () => {
                             margin="normal"
                             onBlur={() => validateField('displayName')}
                             helperText={errors.displayName?.message}
+                            color='secondary'
                         />
 
                         <TextField
@@ -52,6 +61,7 @@ export const RegisterPage = () => {
                             margin="normal"
                             onBlur={() => validateField('email')}
                             helperText={errors.email?.message}
+                            color='secondary'
                         />
 
                         <TextField
@@ -69,12 +79,15 @@ export const RegisterPage = () => {
                             margin="normal"
                             onBlur={() => validateField('password')}
                             helperText={errors.password?.message}
+                            color='secondary'
 
                         />
 
-                        <Button type="submit" variant="contained" fullWidth disabled={isCheckingAuthentication}>
+                        <Button sx={{ marginTop: '1.5rem' }} type="submit" variant="contained" size='large' fullWidth disabled={isCheckingAuthentication}>
                             Sign up
                         </Button>
+
+                        <Typography sx={{ marginTop: '1rem', textAlign: 'center' }}>Alredy have an account? <Link to='/auth/login' className='border-b'>Login!</Link></Typography>
 
                         <Snackbar
                             anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
@@ -86,6 +99,6 @@ export const RegisterPage = () => {
                     </form>
                 </CardContent>
             </Card>
-        </div>
+        </AuthLayout>
     );
 }

@@ -2,7 +2,6 @@ import { Navigate, Routes, Route } from "react-router-dom"
 import { LoginPage, RegisterPage } from "../pages"
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
-// import { CheckingAuth } from '../../../';
 
 
 export const AuthRoutes = () => {

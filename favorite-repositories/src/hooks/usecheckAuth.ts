@@ -4,7 +4,9 @@ import { AppDispatch, RootState } from "../store";
 import { onAuthStateChanged } from 'firebase/auth';
 import { FirebaseAuth } from '../firebase/config';
 import { login, logout } from '../store/auth';
+import { startLoadingFavorite } from '../store/favoriteRepos';
 
+// Custom Hook to check the user auth status
 export const usecheckAuth = () => {
 
     const dispatch = useDispatch<AppDispatch>();
@@ -18,6 +20,8 @@ export const usecheckAuth = () => {
 
             const { uid, email, displayName } = user;
             dispatch(login({ uid, email, displayName }));
+            dispatch(startLoadingFavorite());
+
         })
     }, []);
 

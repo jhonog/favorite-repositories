@@ -1,11 +1,15 @@
 import { useDispatch } from 'react-redux';
-import { AppBar, Grid, IconButton, Toolbar, Typography } from '@mui/material';
-import { LogoutOutlined, MenuOutlined } from '@mui/icons-material';
+import { AppBar, Grid, IconButton, Toolbar } from '@mui/material';
+import { LogoutOutlined } from '@mui/icons-material';
 import { AppDispatch } from '../../store';
 import { startLogout } from '../../store/auth/thunks';
+import Logo from "../../assets/images/Logo-Favorite-repositories.png";
 
+interface NavBarProps {
+    drawerWidth: number
+}
 
-export const NavBar = () => {
+export const NavBar = ({ drawerWidth = 240 }: NavBarProps) => {
 
     const dispatch = useDispatch<AppDispatch>();
 
@@ -16,22 +20,18 @@ export const NavBar = () => {
     return (
         <AppBar
             position='fixed'
-            className='w-full'
+            sx={{
+                width: { sm: `calc(100% - ${drawerWidth}px)` },
+                ml: { sm: `${drawerWidth}px` },
+                backgroundColor: '#fff'
+            }}
         >
             <Toolbar>
-                <IconButton
-                    color='inherit'
-                    edge="start"
-                    sx={{ mr: 2, display: { sm: 'none' } }}
-                >
-                    <MenuOutlined />
-                </IconButton>
-
                 <Grid container direction='row' justifyContent='space-between' alignItems='center'>
-                    <Typography variant='h6' noWrap component='div'> JournalApp </Typography>
+                    <img src={Logo} className='h-16' />
 
                     <IconButton
-                        color='error'
+                        color='primary'
                         onClick={onLogout}
                     >
                         <LogoutOutlined />

@@ -2,12 +2,14 @@ import { signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfi
 import { FirebaseAuth } from './config';
 import { LoginData, SiginUpData } from '../auth/models';
 
+// Firebase provider to register new users
 export const registerUserWithEmailPassword = async ({ email, password, displayName }: SiginUpData) => {
 
     try {
         const resp = await createUserWithEmailAndPassword(FirebaseAuth, email, password);
         const { uid } = resp.user;
 
+        // Updates the displayName in FireBase
         FirebaseAuth.currentUser && await updateProfile(FirebaseAuth.currentUser, { displayName });
 
         return {
@@ -21,7 +23,7 @@ export const registerUserWithEmailPassword = async ({ email, password, displayNa
 
 }
 
-
+// Firebase provider to login with email and password
 export const loginWithEmailPassword = async ({ email, password }: LoginData) => {
 
     try {

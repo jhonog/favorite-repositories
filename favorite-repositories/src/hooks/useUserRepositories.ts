@@ -1,46 +1,43 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { gitHubApi } from "../api/gitHubApi";
-import { RootState } from "../store";
+import { AppDispatch, RootState } from "../store";
 import { useEffect, useState } from "react";
+import { startUserData } from "../store/favoriteRepos";
+import { startLogout } from "../store/auth";
 
-interface UserRespositories {
-    userData: any,
-    repositories: any[],
-    isLoading: boolean
-}
 
 export const useUserRepositories = () => {
+    const dispatch = useDispatch<AppDispatch>();
+
     const { displayName } = useSelector((state: RootState) => state.auth);
+    const { temporalDisplayName } = useSelector((state: RootState) => state.favorite);
 
-    const [userRepositories, setUserRepositories] = useState<UserRespositories>({
-        userData: {},
-        repositories: [],
-        isLoading: true,
-    })
+    const [isLoading, setIsLoading] = useState(true)
 
+    const [userRepositories, setUserRepositories] = useState<any[]>([]);
+
+    // Get the user data using the username
     const getUserRepositories = async () => {
-        const userData = gitHubApi.get<any>(`/${displayName}`);
-        const repositories = gitHubApi.get<any>(`/${displayName}/repos`);
+        try {
 
-        const userRepositoriesResps = await Promise.all([
-            userData,
-            repositories,
-        ]);
+            const repositories = gitHubApi.get<any>(`/${temporalDisplayName ? temporalDisplayName : displayName}/repos`);
 
-        setUserRepositories({
-            userData: userRepositoriesResps[0]?.data,
-            repositories: userRepositoriesResps[1]?.data.map((repository: any) => {
-                return {
-                    name: repository.name
-                }
-            }),
-            isLoading: false
-        })
+            const userRepositoriesResps = await Promise.resolve(
+                repositories,
+            );
+
+            setUserRepositories(userRepositoriesResps.data)
+
+            setIsLoading(false)
+        } catch (error) {
+            dispatch(startLogout({ errorMessage: 'An error has occurred' }))
+        }
     }
 
     useEffect(() => {
+        dispatch(startUserData(temporalDisplayName ? temporalDisplayName : displayName));
         getUserRepositories();
     }, [])
 
-    return { ...userRepositories }
+    return { userRepositories, isLoading }
 }

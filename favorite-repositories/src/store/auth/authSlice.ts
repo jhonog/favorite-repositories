@@ -16,6 +16,7 @@ const initialState: loginState = {
     errorMessage: '',
 }
 
+// Slice to controls the global auth state 
 export const authSlice = createSlice({
     name: 'auth',
     initialState,

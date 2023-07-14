@@ -1,13 +1,16 @@
-import { CircularProgress } from '@mui/material';
-
-import React from 'react'
+import { Box, CircularProgress } from '@mui/material';
+import { AppTheme } from '../../theme';
 
 export const CheckingAuth = () => {
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-primary-main p-4">
-      <div className="flex flex-row justify-center">
-        <CircularProgress color="warning" />
-      </div>
-    </div>
+    <AppTheme>
+
+      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100vh', backgroundColor: '#1F2D48' }}>
+
+        <CircularProgress color="primary" />
+
+      </Box>
+
+    </AppTheme>
   )
 }

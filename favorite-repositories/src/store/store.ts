@@ -1,9 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit'
 import { authSlice } from './auth'
+import { favoriteSlice } from './favoriteRepos'
 
+// The Redux store to controls the application global state  
 export const store = configureStore({
     reducer: {
         auth: authSlice.reducer,
+        favorite: favoriteSlice.reducer
     },
 })
 
