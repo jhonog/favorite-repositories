@@ -51,6 +51,7 @@ This project was developed by Jhon Ospina and the following technologies were us
  - TypeScript
  - HTML
  - CSS
+ - Redux
  - FireStore
  - Yarn
  - Vite
