@@ -45,7 +45,7 @@ yarn dev
 This project was developed by Jhon Ospina and the following technologies were used:
 
 
-## Acknowledgements
+## Technologies
 
  - React
  - TypeScript
