@@ -24,7 +24,7 @@ export const favoriteSlice = createSlice({
         setFavorite: (state, action) => {
             action.payload?.favorite ?
                 state.favoriteRepositories = action.payload?.favorite
-                : state.favoriteRepositories = action.payload?.favorite;
+                : state.favoriteRepositories = [];
             state.id = action.payload?.id
         },
         setCurrentFavorite: (state, action) => {

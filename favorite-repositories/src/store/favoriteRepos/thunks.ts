@@ -33,7 +33,7 @@ export const startLoadingFavorite = () => {
         if (!uid) throw new Error('The users UID doesnt exist');
 
         const favoriteRepositories: FavoriteRepositories = await loadFavorite(uid);
-        dispatch(setFavorite(favoriteRepositories ? favoriteRepositories : []));
+        dispatch(setFavorite(favoriteRepositories));
     }
 }
 
