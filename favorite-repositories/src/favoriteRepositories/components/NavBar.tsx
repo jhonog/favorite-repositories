@@ -3,7 +3,7 @@ import { AppBar, Grid, IconButton, Toolbar } from '@mui/material';
 import { LogoutOutlined } from '@mui/icons-material';
 import { AppDispatch } from '../../store';
 import { startLogout } from '../../store/auth/thunks';
-import Logo from "../../assets/images/Logo-Favorite-repositories.png";
+import Logo from "../../assets/images/Logo-Favorite-repositories-oscuro.png";
 
 interface NavBarProps {
     drawerWidth: number

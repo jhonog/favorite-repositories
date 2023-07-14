@@ -8,25 +8,38 @@ import { useMemo } from 'react';
 import { AuthLayout } from '../layout/AuthLayout';
 import { Link } from 'react-router-dom';
 import { setTemporalDisplayName } from '../../store/favoriteRepos';
+import { useVerifyRepository } from '../../hooks/useVerifyRepository';
 
 export const RegisterPage = () => {
     const dispatch = useDispatch<AppDispatch>();
 
+    const { verifyRepository, isValid } = useVerifyRepository();
+
     // Custom Hook for control forms
-    const { handleSubmit, register, formState: { errors }, trigger } = useForm<SiginUpData>();
+    const { handleSubmit, register, formState: { errors }, trigger, getValues } = useForm<SiginUpData>();
 
     const { status, errorMessage } = useSelector((state: RootState) => state.auth);
 
     const isCheckingAuthentication = useMemo(() => status === 'checking', [status]);
 
     const onSubmit: SubmitHandler<SiginUpData> = (data: SiginUpData) => {
-        dispatch(setTemporalDisplayName(data.displayName))
-        dispatch(startCreatingUserWithEmailPassword(data));
+        verifyRepository(data.displayName);
+
+        if (isValid) {
+            dispatch(setTemporalDisplayName(data.displayName))
+            dispatch(startCreatingUserWithEmailPassword(data));
+        }
     };
 
     const validateField = async (fieldName: keyof SiginUpData) => {
         await trigger(fieldName);
     };
+
+    // Verifies the github username
+    const onValidateUserName = () => {
+        validateField('displayName');
+        verifyRepository(getValues('displayName'));
+    }
 
     return (
         <AuthLayout>
@@ -42,13 +55,13 @@ export const RegisterPage = () => {
                             {...register('displayName', { required: 'This field is required' })}
                             error={!!errors.displayName}
                             margin="normal"
-                            onBlur={() => validateField('displayName')}
+                            onBlur={() => onValidateUserName()}
                             helperText={errors.displayName?.message}
                             color='secondary'
                         />
 
                         <TextField
-                            label="Correo electrónico"
+                            label="Email"
                             fullWidth
                             {...register('email', {
                                 required: 'This field is required',

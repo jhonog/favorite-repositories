@@ -8,6 +8,7 @@ import {
 } from "../../firebase/providers";
 import { collection, doc, setDoc } from 'firebase/firestore/lite';
 import { FirebaseDB } from '../../firebase/config';
+import { setTemporalDisplayName } from "../favoriteRepos";
 
 // Async function to controls the auth status
 export const checkingAuthentication = () => {
@@ -58,7 +59,7 @@ export const startLoginWithEmailPassword = ({ email, password }: LoginData) => {
 export const startLogout = (error?: any) => {
     return async (dispatch: Dispatch) => {
         await logoutFirebase();
-
+        dispatch(setTemporalDisplayName(null));
         dispatch(logout(error));
     };
 };
